@@ -86,9 +86,9 @@ class Interseccao {
 class Estrada {
     public:
         Interseccao *origem;
-		Interseccao *destino;
+	Interseccao *destino;
         int custo;
-		Estrada();
+	Estrada();
         Estrada(Interseccao &origem, Interseccao &destino, int custo) {
             this->origem = &origem;
             this->destino = &destino;
@@ -108,7 +108,7 @@ class Cidade {
 		// a cidade é modelada por n intersecções e m estradas bidirecionais que conectam os pares de intersecções.
 		int n;
 		int m;
-        vector<Interseccao> interseccoes;
+        	vector<Interseccao> interseccoes;
 		vector<Estrada> estradas; // cada estrada possui uma certa estimativa de capacidade de tráfego, mensurada em veículos por minuto.
 
 		Cidade(int n, int m) {
@@ -120,17 +120,17 @@ class Cidade {
 			}
 		}
 
-        void adicionarIntersecao(tipo valor) {
-            Interseccao interseccao(valor);
-            interseccoes.push_back(interseccao);
-        }
+		void adicionarIntersecao(tipo valor) {
+			Interseccao interseccao(valor);
+			interseccoes.push_back(interseccao);
+		}
 
 		bool adicionarEstrada(tipo uValor, tipo vValor, int custo) {
-            Interseccao *u;
-            Interseccao *v;
+			Interseccao *u;
+			Interseccao *v;
 			bool uE = false;
 			bool vE = false;
-            for (int i = 0; i < (int)interseccoes.size(); i++) {
+			for (int i = 0; i < (int)interseccoes.size(); i++) {
 				if (interseccoes[i].valor == uValor) {
 					u = &interseccoes[i];
 					uE = true;
@@ -141,60 +141,65 @@ class Cidade {
 				}
 				if (uE && vE) {
 					Estrada estrada(*u, *v, custo);
-            		estradas.push_back(estrada);
+					estradas.push_back(estrada);
 					return true;
 				}
-            }
+			}
 			return false;
             
 		}
 
-        void imprimir() {
+		void imprimir() {
 			for (int i = 0; i < (int)estradas.size(); i++) {
 				cout << "[" << estradas[i].origem->valor << "," << estradas[i].destino->valor << "]->c(" << estradas[i].custo << ")" << endl;
 			}
 		}
 
-		int capacidadeMinima() { // a menor capacidade de tráfego das estradas remanescentes seja a maior possível
-			return kruskall();
-		}
-
-		
-		/* retorna o custo da AGM
-		* Parametros:
-		*  arestas: lista da arestas
-		*  n: quantidade de vertices
-		*  m: quantidade de arestas
-		*/
-
-		int kruskall() {
-			// ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
-			sort(estradas.rbegin(), estradas.rend());
-		
-			// custo da AGM
-			int custo = 0;
-			int menor = estradas[0].custo;
-		
-			UFDS ufds(n); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
-		
-			int numero_arestas = 0;
-			for (int i = 0; i < (int)estradas.size(); i++) {
-				custo = estradas[i].custo;
-				if (!ufds.mesmoConjunto(estradas[i].origem->valor, estradas[i].destino->valor)) {
-					if (custo < menor)
-						menor = custo;
-					numero_arestas++;
-					if(numero_arestas == n-1)
-					break;
-				
-					ufds.uniao(estradas[i].origem->valor, estradas[i].destino->valor);
-				}
-			}
-		
-			return menor;
-		}
-
 };
+
+/* retorna o custo da AGM
+* Parametros:
+*  arestas: lista da arestas
+*  n: quantidade de vertices
+*  m: quantidade de arestas
+*/
+
+int kruskal(Cidade &cidade) { // Algoritmo de kruskall adaptado ao problema
+
+	UFDS ufds(cidade.n); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
+
+	// ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
+	sort(cidade.estradas.rbegin(), cidade.estradas.rend()); // ordene as arestas de G.E em ordem não decrescente de peso w(custo)
+	// sobrecarga do operador '<' para realizar a ordenação em ordem decrescente de custo
+
+	// custo da AGM
+	int custo = 0;
+	int numero_arestas = 0;
+
+	int menor = cidade.estradas[0].custo;
+
+	Interseccao *u;
+	Interseccao *v;
+	
+	// for cada aresta (u, v) em G.E, tomada em ordem decrescente de peso
+	for (int i = 0; i < (int)cidade.estradas.size(); i++) {
+		u = cidade.estradas[i].origem;
+		v = cidade.estradas[i].destino;
+		custo = cidade.estradas[i].custo;
+		// if (FIND-SET(u) != FIND-SET(v))
+		if (!ufds.mesmoConjunto(u->valor, v->valor)) {
+			if (custo < menor)
+				menor = custo;
+			numero_arestas++;
+			if(numero_arestas == cidade.n-1)
+				break;
+			// UNION(u, v)
+			ufds.uniao(u->valor, v->valor);
+		}
+	}
+
+	return menor;
+}
 
 int main() {
 
@@ -202,31 +207,29 @@ int main() {
 	cin >> q;
 
 	for (int i = 0; i < q; i++) {
-			int n, m;
+		int n, m;
 
-			cin >> n >> m;
+		cin >> n >> m;
 
-			Cidade cidade(n, m);
+		Cidade cidade(n, m);
 
-			// Inserção de valores manualmente
-			/*
-			for (int j = 0; j < n; j++) {
-				tipo x;
-				cin >> x;
-				cidade.adicionarIntersecao(x);
-			}
-			*/
+		// Inserção de valores manualmente
+		/*
+		for (int j = 0; j < n; j++) {
+			tipo x;
+			cin >> x;
+			cidade.adicionarIntersecao(x);
+		}
+		*/
 
-			for (int i = 0; i < m; i++) {
-				tipo u, v;
-				int c;
-				cin >> u >> v >> c;
-				i = (cidade.adicionarEstrada(u, v, c))?i:i-1; // caso não exista nenhuma intersecção com um dos valores
-			}
+		for (int i = 0; i < m; i++) {
+			tipo u, v;
+			int c;
+			cin >> u >> v >> c;
+			i = (cidade.adicionarEstrada(u, v, c))?i:i-1; // caso não exista nenhuma intersecção com um dos valores
+		}
 
-			cout << cidade.capacidadeMinima() << endl;
+		cout << kruskal(cidade) << endl;
 	}
 	return 0;
 }
-
-
