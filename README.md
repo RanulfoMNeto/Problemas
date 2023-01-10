@@ -1,7 +1,5 @@
 ## Projetando-Estradas-OO
-Disciplina: GCC218 - Algoritmos em Grafos 
-
-Projeto semelhante ao do repositório "Projetando-Estradas", no entanto, esse foi desenvolvido através da orientação à objetos(OO).
+Disciplina: GCC218 - Algoritmos em Grafos
 
 # Descrição
 O prefeito de Delta City contratou uma consultoria para um projeto de construção de uma nova rede de estradas. A cidade é modelada por n intersecções e m estradas bidirecionais que conectam os pares de intersecções. Cada estrada possui uma certa estimativa de capacidade de tráfego, mensurada em veículos por minuto. Uma análise preliminar da empresa de consultoria indicou que sempre existe um caminho entre uma dada intersecção x e outra intersecção y, ao longo de uma sequência de estradas. O Departamento de Infraestrutura de Delta City está com sérios problemas orçamentários, e necessita de reduzir os custos de manutenção de malha viária fechando algumas estradas, mantendo as intersecções conectadas. A prefeitura de Delta City pretende realizar tal estudo, de forma que a menor capacidade de tráfego das estradas remanescentes seja a maior possível.
