@@ -33,9 +33,6 @@ int bellman_ford(int org) {
 	p.assign(n, -1);
 	d[org] = 0;
 
-	// variaveis auxiliares
-	int v, peso;
-
 	for(int i = 0; i < n - 1; i++) {
 		for(int u = 0; u < n; u++) {
 			for(int j = 0; j < (int)LA[u].size(); j++) {
@@ -68,7 +65,7 @@ int main() {
 		menor = (resultado < menor)?resultado:menor;
 	}
 
-	cout << menor;
+	cout << menor << endl;
 
 	return 0;
 }
