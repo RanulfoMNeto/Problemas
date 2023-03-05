@@ -1,6 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <climits>
+
+/*
+	Gilson dos Santos Junior 202020783
+	Heitor Rodrigues Sabino 202120101
+	Ranulfo Mascari Neto 202120792
+*/
 
 using namespace std;
 
@@ -13,8 +20,13 @@ typedef vector<vi> vvi;
 
 int INFINITY = INT_MAX;
 
+vector<int> currentPath;
+
+vvi copyGraph;
+
 // Using BFS as a searching algorithm
 int bfs(int source,int target,int n,vector<int>& parent,vvi& graph){
+	currentPath.clear();
 	//Update the parent vector as each node value to be -1
 	fill(parent.begin(),parent.end(),-1);
 	//parent of source node to be -2
@@ -28,7 +40,9 @@ int bfs(int source,int target,int n,vector<int>& parent,vvi& graph){
 	while(!q.empty()){
 		//storing top node and min capacity so far
 		int u = q.front().first;
+		currentPath.push_back(u);
 		int cap = q.front().second;
+		
 		//Removing top node from queue
 		q.pop();
 		//Looping all edges from u
@@ -41,6 +55,7 @@ int bfs(int source,int target,int n,vector<int>& parent,vvi& graph){
 				int min_cap = min(cap,graph[u][v]);
 				//If v is the target node then return minimum capacity
 				if(v==target){
+					currentPath.push_back(v);
 					return min_cap;
 				}
 				//if we didn't find target node
@@ -64,6 +79,9 @@ int Ford_Fulkerson(int source,int target,int n,vvi& graph){
 	//looping while minimum capacity become zero 
 	//For finding path and minimum capacity we call function bfs()
 	while((min_cap = bfs(source,target,n,parent,graph))){
+
+		
+
 		//Adding the min_cap from this path 
 		max_flow += min_cap;
 		//storing target node in v
@@ -91,8 +109,8 @@ int main() {
 	int n; // number of vertices
 	int m; // number of edges
 	
-	int s = 1; // s: source
-	int t = 2; // t: target
+	int s = 0; // s(1): source
+	int t = 5; // t(2): target
 
 	do {
 
@@ -103,18 +121,45 @@ int main() {
 		for(int i = 0; i < m; i++) {		
 			int u, v, c; // edge leaving vertex 'u' and reaching 'v' with cost c
 			cin >> u >> v >> c;
+			u = u - 1;
+			v = v - 1;
 
 			graph[u][v] = c;
-			// propagação energética bidirecional
+			
+
 			int z = graph.size();
+			for (int j = 0; j < n; j++)
+				graph[j].push_back(0);
+			n++;
+			graph.push_back(vi(n,0));
+			// propagação energética bidirecional
 			// c[u][v] = c[v][u]
 			graph[v][z] = c;
 			graph[z][u] = c;
 		}
-		cout << "Maximum Flow Using Ford Fulkerson Algo: " << Ford_Fulkerson(s,t,n,graph) << endl;
+		
+		copyGraph = graph;
 
-	} while (n && m);	
+		if (n) {
+			Ford_Fulkerson(s,t,n,graph);
+			vii arestasSaturadas;
+			for (int i = 0; i < graph.size(); i++) {
+				for (int j = 0; j < graph[i].size(); j++) {
+					if (copyGraph[i][j] != 0) {
+						if (graph[i][j] == 0) {
+							arestasSaturadas.push_back(ii(i,j));
+						}
+					}
+				}
+			}
+			for (int j = 0; j < arestasSaturadas.size(); j++) {
+				cout << arestasSaturadas[j].first+1 << " " << arestasSaturadas[j].second+1 << endl;
+			}
+			cout << endl;
+		}
+		copyGraph.clear();
+	
+	} while (n and m);
 
 	return 0;
 }
-
