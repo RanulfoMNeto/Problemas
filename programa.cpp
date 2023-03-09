@@ -24,6 +24,11 @@ vector<int> currentPath;
 
 vvi copyGraph;
 
+/*
+	Algoritmo baseado na implementação desenvolvida por Manvi Saxena em FavTutor:
+	https://favtutor.com/blogs/ford-fulkerson-algorithm
+*/
+
 // Using BFS as a searching algorithm
 int bfs(int source,int target,int n,vector<int>& parent,vvi& graph){
 	currentPath.clear();
@@ -104,6 +109,14 @@ int Ford_Fulkerson(int source,int target,int n,vvi& graph){
 	return max_flow;
 }
 
+// Também seria necessário selecionar as arestas saturadas da Rede Residual de cada iteração do Método Ford-Fulkerson, ao invés de apenas a iteração final
+
+// Inserir a aresta (u,v) em G.E, caso sua inserção não torne possível existir um caminho de s até t
+void inserirArestas(vvi grafoSemArestasSaturadas, vii arestasSaturadas, int s, int t) {
+	// Realizar uma ordenação das arestas (por custo) parar determinar o melhor conjunto de arestas (das inseridas) de um corte mínimo
+	// imprimir arestas inseridas (resposta)
+}
+
 int main() {
 	
 	int n; // number of vertices
@@ -143,6 +156,7 @@ int main() {
 		if (n) {
 			Ford_Fulkerson(s,t,n,graph);
 			vii arestasSaturadas;
+			// Seleciona as arestas saturadas da rede residual (candidatas ao corte mínimo) na iteração final
 			for (int i = 0; i < graph.size(); i++) {
 				for (int j = 0; j < graph[i].size(); j++) {
 					if (copyGraph[i][j] != 0) {
@@ -152,6 +166,13 @@ int main() {
 					}
 				}
 			}
+
+			/*
+				Infelizmente não foi possível finalizar a implementação do código em razão do tempo.
+				No entanto, deixo aqui uma possível resolução para o problema utilizando a função "inserirArestas" que retornaria (imprimir) as arestas da solução.
+			*/
+			// inserirArestas(vvi grafoSemArestasSaturadas, vii arestasSaturadas, int s, int t);
+			
 			for (int j = 0; j < arestasSaturadas.size(); j++) {
 				cout << arestasSaturadas[j].first+1 << " " << arestasSaturadas[j].second+1 << endl;
 			}
