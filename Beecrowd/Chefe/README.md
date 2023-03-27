@@ -1,1 +1,19 @@
 # Chefe
+
+Todos conhecem Iks, a última moda em redes sociais, que fez tanto sucesso que competidores como Facebook e Google+ estão começando a ter dificuldades financeiras. Assim como muitas companhias “.com”, Iks surgiu em uma pequena garagem, mas hoje emprega milhares de pessoas no mundo todo. O sistema de gerência utilizado em Iks é bem diferente do padrão. Por exemplo, não há diretorias ou superintendências. No entanto, como é usual em outras companhias, há uma cadeia (ou melhor, várias cadeias) de comando: uma pessoa pode gerenciar outras pessoas, e pode ser gerenciada por outras pessoas. As figuras abaixo mostra a cadeia de comando para alguns empregados, junto com suas idades.
+
+![Grafo de exemplo](https://resources.beecrowd.com.br/gallery/images/problems/UOJ_1469.png)
+
+Uma pessoa $P1$ pode gerenciar outra pessoa $P2$ diretamente (quando $P1$ é o superior imediato de $P2$) ou indiretamente (quando $P1$ gerencia diretamente uma pessoa $P3$ que gerencia $P2$ direta ou indiretamente). Por exemplo, na figura (a) acima, Alice gerencia David diretamente e Clara indiretamente. Uma pessoa não gerencia a si própria, nem direta nem indiretamnte. Um folclore que apareceu em Wall Street é que Iks é tão bem sucedido porque em sua rede de comando um(a) gerente é sempre mais jovem do que as pessoas que ele(a) gerencia. Como podemos ver na figura acima, isso não é verdade. Mas esse folclore incentivou Iks a desenvolver uma ferramenta para analisar o seu sistema de gerenciamento, e estudar se tem alguma influência no sucesso da empresa. Você foi contratado para trabalhar nessa ferramenta. Dadas a descrição da cadeia de comando na Iks e as idades de seus empregados, escreva um programa que execute uma série de instruções. Instruções podem ser de dois tipos: trocas de gerência e perguntas. Uma instrução de troca de gerência faz dois empregados $A$ e $B$ trocarem suas posições na cadeia de comando. Como exemplo, a figura (**b**) acima mostra a cadeia de comando resultante quando David e George trocam suas respectivas posições na cadeia de comando. Uma instrução de pergunta identifica um empregado A e deseja saber a idade do mais jovem gerente (direto ou indireto) de $A$ na cadeia de comando. Por exemplo, no cenário da figura (**a**) acima a idade do(a) gerente mais jovem de Clara é 18 anos; já no cenário da figura (**b**), a idade do(a) gerente mais jovem de Clara é 21 anos.
+
+## Entrada
+
+A entrada contém vários casos de teste. Cada caso de teste é composto de várias linhas. A primeira linha contém três inteiros $N$ ($1 \leq N \leq 500$), $M$($0 \leq M \leq 60 \times 103$) e $I$($1 \leq I \leq 500$), indicando respectivamente o número de empregados, o número de relações de gerência direta e o número de instruçõoes. Empregados são identificados por números de $1$ a $N$. A segunda linha contém $N$ inteiros $Ki$($1 \leq Ki \leq 100$, para $1 \leq i \leq N$), onde $Ki$ indica a idade do empregado de número $i$.
+
+Cada uma das $M$ linhas seguintes contém dois inteiros $X$ e $Y$($1 \leq X, Y \leq N, X != Y$) , indicando que $X$ gerencia $Y$ diretamente. Seguem-se $I$ linhas, cada uma descrevendo uma instrução. Uma instruçãao de troca de gerência é descrita em uma linha contendo o identificador $T$ seguido de dois inteiros $A$ e $B$($1 \leq A,B \leq N$), indicando os dois empregados que devem trocar seus lugares na cadeia de comando. Uma instrução de pergunta é descrita em uma linha contendo o identificador $P$ seguido de um inteiro $E$($1 \leq E \leq N$), indicando um empregado. A última instrução será sempre do tipo pergunta.
+
+O final da entrada é determinado por EOF (fim de arquivo).
+
+## Saída
+
+Para cada instrução de pergunta seu programa deve imprimir uma linha contendo um único inteiro, a idade da pessoa mais jovem que gerencia (direta ou indiretamente) o empregado nomeado na pergunta. Se o empregado nomeado não possui um gerente, imprima o caractere ‘*****’ (asterisco).
