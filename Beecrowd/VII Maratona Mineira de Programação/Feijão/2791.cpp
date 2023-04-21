@@ -15,6 +15,6 @@ int main() {
             feijao = i;
         }
     }
-    cout << feijao+1;
+    cout << feijao+1 << endl;
     return 0;
 }
