@@ -16,9 +16,12 @@ typedef pair<int, int> ii;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
 
+typedef pair<int , ii> iii; // (distância, (i, j))
+
 int INF = INT_MAX;
 
-int bfs(vvc &LA, int N, int M, int i, int j) {
+
+iii bfs(vvc &LA, int N, int M, int i, int j) {
 
 	vvb visitados = vvb(N, vb(M, false));
     vvi d = vvi(N, vi(M, INF));
@@ -29,6 +32,7 @@ int bfs(vvc &LA, int N, int M, int i, int j) {
     d[i][j] = 0;
 	fila.push(ii(i, j));
 
+    ii entrada;
     int maior = 0;
 
 	while(!fila.empty()) {
@@ -42,29 +46,32 @@ int bfs(vvc &LA, int N, int M, int i, int j) {
             visitados[i-1][j] = true;
             d[i-1][j] = d[i][j] + 1;
             maior = d[i-1][j];
+            entrada = ii(i-1,j);
             fila.push(ii(i-1, j));
         }
         if ((j < M-1) && (visitados[i][j+1] == false) && (LA[i][j+1] == '.')) {
             visitados[i][j+1] = true;
             d[i][j+1] = d[i][j] + 1;
             maior = d[i][j+1];
+            entrada = ii(i,j+1);
             fila.push(ii(i, j+1));
         }
         if ((i < N-1) && (visitados[i+1][j] == false) && (LA[i+1][j] == '.')) {
             visitados[i+1][j] = true;
             d[i+1][j] = d[i][j] + 1;
             maior = d[i+1][j];
+            entrada = ii(i+1,j);
             fila.push(ii(i+1, j));
         }
         if ((j > 0) && (visitados[i][j-1] == false) && (LA[i][j-1] == '.')) {
             visitados[i][j-1] = true;
             d[i][j-1] = d[i][j] + 1;
             maior = d[i][j-1];
+            entrada = ii(i,j-1);
             fila.push(ii(i, j-1));
         }
 	}
-
-    return maior;
+    return iii(maior, entrada);
 
 }
 
@@ -84,18 +91,19 @@ int main() {
             }
         }
 
-        int maior = 0;
-        for (int i = 0; i < N; i++) {	
-            for (int j = 0; j < M; j++) {
+        bool encontrou = false;
+        ii entrada;
+        for (int i = 0; i < N && !encontrou; i++) {	
+            for (int j = 0; j < M && !encontrou; j++) {
                 if (LA[i][j] == '.') {
-                    // encontra a saída do labirinto com a maior distância
-                    int maiorLocal = bfs(LA, N, M, i, j); // retorna a distância
-                    if (maiorLocal > maior) {
-                        maior = maiorLocal;
-                    }
+                    encontrou = true;
+                    // encontra a entrada do labirinto (maior distância)
+                    entrada = bfs(LA, N, M, i, j).second; // retorna a entrada
                 }
             }
         }
+
+        int maior = bfs(LA, N, M, entrada.first, entrada.second).first; // encontra a saída do labirinto a partir da maior distância da entrada
         
         cout << maior << endl;
 
